@@ -3,11 +3,13 @@ package pl.polsl.edge_bundling.model;
 
 import java.util.Date;
 
-public class Vertex implements Comparable<Vertex>{
+public class Vertex implements Comparable<Vertex> {
 
     private Date timestamp;
 
     private int x;
+
+    private int y;
 
     public Date getTimestamp() {
         return timestamp;
@@ -33,8 +35,6 @@ public class Vertex implements Comparable<Vertex>{
         this.y = y;
     }
 
-    private int y;
-
     public Vertex(Date timestamp, int x, int y) {
         this.timestamp = timestamp;
         this.x = x;
@@ -42,6 +42,12 @@ public class Vertex implements Comparable<Vertex>{
     }
 
     public Vertex() {
+    }
+
+    public Vertex(int x, int y) {
+        this.timestamp = null;
+        this.x = x;
+        this.y = y;
     }
 
     public Vertex(String[] entry) {
@@ -53,5 +59,18 @@ public class Vertex implements Comparable<Vertex>{
     @Override
     public int compareTo(Vertex vertex) {
         return getTimestamp().compareTo(vertex.getTimestamp());
+    }
+
+    public double distanceTo(Vertex vertex) {
+        return Math.sqrt((vertex.getY() - this.getY()) * (vertex.getY() - this.getY()) +
+                (vertex.getX() - this.getX()) * (vertex.getX() - this.getX()));
+    }
+
+    public int xDistanceTo(Vertex vertex) {
+        return this.getX() - vertex.getX();
+    }
+
+    public int yDistanceTo(Vertex vertex) {
+        return this.getY() - vertex.getY();
     }
 }
