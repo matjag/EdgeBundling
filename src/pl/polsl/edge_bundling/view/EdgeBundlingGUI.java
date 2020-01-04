@@ -28,6 +28,7 @@ public class EdgeBundlingGUI {
         Canvas canvas = new Canvas(2288, 1712);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.RED);
+        gc.setFill(Color.YELLOW);
         ScrollPane scrollPane = new ScrollPane(canvas);
         scrollPane.setPrefSize(300, 300);
         scrollPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -42,7 +43,11 @@ public class EdgeBundlingGUI {
         } catch (FileNotFoundException e) {
             //todo
         }
-        edges.forEach(edge -> gc.strokeLine(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY()));
+        edges.forEach(edge -> {
+            gc.fillOval(edge.getStartX() - 2, edge.getStartY() - 2, 4, 4);
+            gc.strokeLine(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY());
+            gc.fillOval(edge.getEndX() - 2, edge.getEndY() - 2, 4, 4);
+        });
         stage.setMinWidth(100);
         stage.setMinHeight(100);
         stage.setScene(scene);

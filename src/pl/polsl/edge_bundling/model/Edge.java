@@ -6,6 +6,13 @@ public class Edge {
 
     private Vertex endingVertex;
 
+    public Edge() {
+    }
+
+    public Edge(Vertex startingVertex, Vertex endingVertex) {
+        this.startingVertex = startingVertex;
+        this.endingVertex = endingVertex;
+    }
 
     public Vertex getStartingVertex() {
         return startingVertex;
@@ -21,5 +28,10 @@ public class Edge {
 
     public void setEndingVertex(Vertex endingVertex) {
         this.endingVertex = endingVertex;
+    }
+
+    //todo int?
+    public double getLength() {
+        return startingVertex.distanceTo(endingVertex);
     }
 }

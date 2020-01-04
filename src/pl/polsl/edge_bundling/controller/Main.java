@@ -5,17 +5,18 @@ import javafx.application.Application;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import pl.polsl.edge_bundling.model.DataLoader;
-import pl.polsl.edge_bundling.model.Vertex;
+import pl.polsl.edge_bundling.model.DividedEdge;
+import pl.polsl.edge_bundling.model.Edge;
+import pl.polsl.edge_bundling.model.EdgeBundlingAlgorithm;
 import pl.polsl.edge_bundling.view.EdgeBundlingGUI;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Main extends Application {
     private EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
     private Controller controller = new Controller();
+    private final EdgeBundlingAlgorithm edgeBundlingAlgorithm = new EdgeBundlingAlgorithm();
 
     public static void main(String[] args) {
         launch(args);
@@ -26,20 +27,19 @@ public class Main extends Application {
     public void start(Stage stage) {
         DataLoader dataLoader = new DataLoader();
 //        List<Vertex> list = dataLoader.loadFromCsv("data/A10.csv"); todo
-        List<List<Vertex>> tmp = new ArrayList<>();
-        for (int i = 10; i < 67; i++) {
-            tmp.add(dataLoader.loadFromCsv("data/A" + i + ".csv"));
-        }
+        Set<Edge> edges = new HashSet<>();
+        Set<DividedEdge> dividedEdges = new HashSet<>();
+        Set<Line> lines = new HashSet<>();
+//        for (int i = 10; i < 67; i++) {
+//            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+//        }
+        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
 
-        Set<Line> edges = new HashSet<>();
+        edges.forEach(edge -> dividedEdges.add(new DividedEdge(edge, 5, 1)));
 
-        for (List<Vertex> list : tmp) {
-            for (int i = 0; i < list.size() - 1; i++) {
-                edges.add(controller.verticesToLine(list.get(i), list.get(i + 1)));
-            }
-        }
+        dividedEdges.forEach(edge -> lines.addAll(controller.dividedEdgeToLine(edge)));
 
-        edgeBundlingGUI.setEdges(edges);
+        edgeBundlingGUI.setEdges(lines);
         edgeBundlingGUI.start(stage);
     }
 }
