@@ -27,10 +27,11 @@ public class Main extends Application {
         DataLoader dataLoader = new DataLoader();
 //        List<Vertex> list = dataLoader.loadFromCsv("data/A10.csv"); todo
         List<List<Vertex>> tmp = new ArrayList<>();
-        for (int i = 10; i < 67; i++) {
-            tmp.add(dataLoader.loadFromCsv("data/A" + i + ".csv"));
-        }
+//        for (int i = 10; i < 67; i++) {
+//            tmp.add(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+//        }
 
+        tmp.add(dataLoader.loadFromCsv("data/test.csv"));
         Set<Line> edges = new HashSet<>();
 
         for (List<Vertex> list : tmp) {
