@@ -6,6 +6,23 @@ public class Force {
 
     private double y;
 
+    public Force(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Force combine(Force force) {
+        this.x += force.getX();
+        this.y += force.getY();
+        return this;
+    }
+
+    public Force scale(double scale) {
+        this.x *= scale;
+        this.y *= scale;
+        return this;
+    }
+
     public double getX() {
         return x;
     }

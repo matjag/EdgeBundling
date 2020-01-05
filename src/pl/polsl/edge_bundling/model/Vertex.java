@@ -31,6 +31,11 @@ public class Vertex implements Comparable<Vertex> {
         return y;
     }
 
+    public void applyForce(Force force) {
+        x+= force.getX();
+        y+= force.getY();
+    }
+
     public void setY(int y) {
         this.y = y;
     }

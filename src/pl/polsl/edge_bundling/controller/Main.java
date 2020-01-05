@@ -14,14 +14,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Main extends Application {
-    private EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
-    private Controller controller = new Controller();
-    private final EdgeBundlingAlgorithm edgeBundlingAlgorithm = new EdgeBundlingAlgorithm();
+    private final EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
+    private final Controller controller = new Controller();
+    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.1, 10, 4, 0.1);
 
     public static void main(String[] args) {
         launch(args);
     }
-
 
     @Override
     public void start(Stage stage) {
@@ -30,12 +29,21 @@ public class Main extends Application {
         Set<Edge> edges = new HashSet<>();
         Set<DividedEdge> dividedEdges = new HashSet<>();
         Set<Line> lines = new HashSet<>();
-//        for (int i = 10; i < 67; i++) {
-//            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
-//        }
-        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
+        for (int i = 10; i < 25; i++) {
+            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+        }
+//        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
 
-        edges.forEach(edge -> dividedEdges.add(new DividedEdge(edge, 5, 1)));
+        edges.forEach(edge -> dividedEdges.add(new DividedEdge(edge, algorithm.getNumberOfSegments(), algorithm.getSpringConstant())));
+
+        for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
+            for (int vertexIndex = 1; vertexIndex < algorithm.getNumberOfSegments(); vertexIndex++) {
+                for (DividedEdge edge : dividedEdges) {
+                    algorithm.applyForces(dividedEdges, edge, vertexIndex);
+                }
+            }
+        }
+
 
         dividedEdges.forEach(edge -> lines.addAll(controller.dividedEdgeToLine(edge)));
 
