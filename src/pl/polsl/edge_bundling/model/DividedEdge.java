@@ -15,8 +15,8 @@ public class DividedEdge extends Edge {
         Vertex endingVertex = edge.getEndingVertex();
         divisionPoints.add(startingVertex);
 
-        int xLengthOfEdge = startingVertex.xDistanceTo(endingVertex);
-        int yLengthOfEdge = startingVertex.yDistanceTo(endingVertex);
+        int xLengthOfEdge = endingVertex.xDistanceTo(startingVertex);
+        int yLengthOfEdge = endingVertex.yDistanceTo(startingVertex);
         int xSegmentLength = xLengthOfEdge / numberOfSegments; //todo Math.round?
         int ySegmentLength = yLengthOfEdge / numberOfSegments;
 
