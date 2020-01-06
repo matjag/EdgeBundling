@@ -16,7 +16,7 @@ import java.util.Set;
 public class Main extends Application {
     private final EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
     private final Controller controller = new Controller();
-    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.1, 10, 4, 0.1);
+    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.1, 40, 4, 0.1);
 
     public static void main(String[] args) {
         launch(args);
@@ -35,6 +35,7 @@ public class Main extends Application {
 //        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
 
         edges.forEach(edge -> dividedEdges.add(new DividedEdge(edge, algorithm.getNumberOfSegments(), algorithm.getSpringConstant())));
+        dividedEdges.removeIf(edge -> edge.getLength() ==0);
 
         for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
             for (int vertexIndex = 1; vertexIndex < algorithm.getNumberOfSegments(); vertexIndex++) {

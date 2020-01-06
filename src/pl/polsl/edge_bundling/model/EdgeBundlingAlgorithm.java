@@ -43,8 +43,12 @@ public class EdgeBundlingAlgorithm {
         Vertex currentVertex = dividedEdge.getDivisionPoints().get(vertexIndex);
         dividedEdges.forEach(edge -> {
             if (edge != dividedEdge) {//todo potential bottleneck
-                force.setX(force.getX() + 1.0 / (currentVertex.getX() - edge.getDivisionPoints().get(vertexIndex).getX()));
-                force.setY(force.getY() + 1.0 / (currentVertex.getY() - edge.getDivisionPoints().get(vertexIndex).getY()));
+                int xDistance = currentVertex.getX() - edge.getDivisionPoints().get(vertexIndex).getX();
+                int yDistance = currentVertex.getY() - edge.getDivisionPoints().get(vertexIndex).getY();
+                if(xDistance != 0 && yDistance != 0) {
+                    force.setX(force.getX() + 1.0 / (xDistance));
+                    force.setY(force.getY() + 1.0 / (yDistance));
+                }
             }
         });
 
