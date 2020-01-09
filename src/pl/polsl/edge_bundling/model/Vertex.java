@@ -7,9 +7,9 @@ public class Vertex implements Comparable<Vertex> {
 
     private Date timestamp;
 
-    private int x;
+    private double x;
 
-    private int y;
+    private double y;
 
     public Date getTimestamp() {
         return timestamp;
@@ -19,7 +19,7 @@ public class Vertex implements Comparable<Vertex> {
         this.timestamp = timestamp;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
@@ -27,13 +27,14 @@ public class Vertex implements Comparable<Vertex> {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void applyForce(Force force) {
-        x+= force.getX();
-        y+= force.getY();
+    public Vertex applyForce(Force force) {
+//        x+= force.getX();
+//        y+= force.getY();
+        return new Vertex(x + force.getX(),y + force.getY());
     }
 
     public void setY(int y) {
@@ -49,7 +50,13 @@ public class Vertex implements Comparable<Vertex> {
     public Vertex() {
     }
 
-    public Vertex(int x, int y) {
+    public Vertex(Vertex template){
+        this.timestamp = template.getTimestamp();
+        this.x = template.getX();
+        this.y = template.getY();
+    }
+
+    public Vertex(double x, double y) {
         this.timestamp = null;
         this.x = x;
         this.y = y;
@@ -71,11 +78,11 @@ public class Vertex implements Comparable<Vertex> {
                 (vertex.getX() - this.getX()) * (vertex.getX() - this.getX()));
     }
 
-    public int xDistanceTo(Vertex vertex) {
-        return this.getX() - vertex.getX();
+    public double xDistanceTo(Vertex vertex) {
+        return vertex.getX() - this.getX();
     }
 
-    public int yDistanceTo(Vertex vertex) {
-        return this.getY() - vertex.getY();
+    public double yDistanceTo(Vertex vertex) {
+        return vertex.getY() - this.getY();
     }
 }

@@ -1,7 +1,7 @@
 package pl.polsl.edge_bundling.model;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class EdgeBundlingAlgorithm {
 
@@ -20,9 +20,6 @@ public class EdgeBundlingAlgorithm {
         this.springConstant = springConstant;
     }
 
-    public EdgeBundlingAlgorithm() {
-    }
-
     public Force calculateSpringForce(DividedEdge dividedEdge, int vertexIndex) {
         List<Vertex> vertices = dividedEdge.getDivisionPoints();
         Vertex previousVertex = vertices.get(vertexIndex - 1);
@@ -35,7 +32,7 @@ public class EdgeBundlingAlgorithm {
         return new Force(x, y);
     }
 
-    public Force calculateElectrostaticForce(Set<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
+    public Force calculateElectrostaticForce(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         if (vertexIndex == 0 || vertexIndex == dividedEdge.getDivisionPoints().size()) {
             throw new IllegalArgumentException();//todo
         }
@@ -43,11 +40,13 @@ public class EdgeBundlingAlgorithm {
         Vertex currentVertex = dividedEdge.getDivisionPoints().get(vertexIndex);
         dividedEdges.forEach(edge -> {
             if (edge != dividedEdge) {//todo potential bottleneck
-                int xDistance = currentVertex.getX() - edge.getDivisionPoints().get(vertexIndex).getX();
-                int yDistance = currentVertex.getY() - edge.getDivisionPoints().get(vertexIndex).getY();
-                if(xDistance != 0 && yDistance != 0) {
-                    force.setX(force.getX() + 1.0 / (xDistance));
-                    force.setY(force.getY() + 1.0 / (yDistance));
+                double xDistance = currentVertex.xDistanceTo(edge.getDivisionPoints().get(vertexIndex));
+                double yDistance = currentVertex.yDistanceTo(edge.getDivisionPoints().get(vertexIndex));
+                if (xDistance != 0) {
+                    force.setX(force.getX() + (1.0 / xDistance));
+                }
+                if (yDistance != 0) {
+                    force.setY(force.getY() + (1.0 / yDistance));
                 }
             }
         });
@@ -55,18 +54,41 @@ public class EdgeBundlingAlgorithm {
         return force;
     }
 
-    public Force calculateForces(Set<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
+    public Force calculateForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         Force force = new Force(0, 0);
-        force.combine(calculateSpringForce(dividedEdge, vertexIndex));
+//        force.combine(calculateSpringForce(dividedEdge, vertexIndex));
         force.combine(calculateElectrostaticForce(dividedEdges, dividedEdge, vertexIndex));
         return force;
     }
 
-    public void applyForces(Set<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
+    public List<DividedEdge> iterate(List<DividedEdge> dividedEdges) {
+        List<DividedEdge> nextIteration = new ArrayList<>();
+        int numberOfSegments = dividedEdges.get(0).getDivisionPoints().size() - 1;
+        for (DividedEdge edge : dividedEdges) {
+            nextIteration.add(new DividedEdge(edge));
+        }
+
+        for (int edgeIndex = 0; edgeIndex < dividedEdges.size(); edgeIndex++) {
+            List<Vertex> tmp = new ArrayList<>();
+            tmp.add(dividedEdges.get(edgeIndex).getStartingVertex());
+
+            for (int vertexIndex = 1; vertexIndex < numberOfSegments; vertexIndex++) {
+                tmp.add(applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex));
+            }
+            tmp.add(dividedEdges.get(edgeIndex).getEndingVertex());
+            nextIteration.get(edgeIndex).setDivisionPoints(tmp);
+        }
+
+        return nextIteration;
+    }
+
+
+    public Vertex applyForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         Force force = calculateForces(dividedEdges, dividedEdge, vertexIndex);
         force.scale(initialStep);
-        dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
+        return dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
     }
+
 
     public double getInitialStep() {
         return initialStep;

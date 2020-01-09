@@ -4,19 +4,21 @@ package pl.polsl.edge_bundling.controller;
 import javafx.application.Application;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import pl.polsl.edge_bundling.model.DataLoader;
-import pl.polsl.edge_bundling.model.DividedEdge;
-import pl.polsl.edge_bundling.model.Edge;
-import pl.polsl.edge_bundling.model.EdgeBundlingAlgorithm;
+import pl.polsl.edge_bundling.model.*;
 import pl.polsl.edge_bundling.view.EdgeBundlingGUI;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class Main extends Application {
     private final EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
     private final Controller controller = new Controller();
-    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.1, 40, 4, 0.1);
+    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(10, 50, 4, 10);
 
     public static void main(String[] args) {
         launch(args);
@@ -27,23 +29,41 @@ public class Main extends Application {
         DataLoader dataLoader = new DataLoader();
 //        List<Vertex> list = dataLoader.loadFromCsv("data/A10.csv"); todo
         Set<Edge> edges = new HashSet<>();
-        Set<DividedEdge> dividedEdges = new HashSet<>();
+        List<DividedEdge> dividedEdges = new ArrayList<>();
         Set<Line> lines = new HashSet<>();
-        for (int i = 10; i < 25; i++) {
-            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
-        }
-//        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
 
-        edges.forEach(edge -> dividedEdges.add(new DividedEdge(edge, algorithm.getNumberOfSegments(), algorithm.getSpringConstant())));
-        dividedEdges.removeIf(edge -> edge.getLength() ==0);
+//        for (int i = 10; i < 25; i++) {
+//            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+//        }
+//
+        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 100)));
+        edges.add(new Edge(new Vertex(200, 150), new Vertex(1100, 150)));
+
+        edges.removeIf(edge -> edge.getLength() < 7.5);//todo
+
+        for(Edge edge : edges){
+            dividedEdges.add(new DividedEdge(edge, algorithm.getNumberOfSegments(), algorithm.getSpringConstant()));
+
+        }
 
         for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
-            for (int vertexIndex = 1; vertexIndex < algorithm.getNumberOfSegments(); vertexIndex++) {
-                for (DividedEdge edge : dividedEdges) {
-                    algorithm.applyForces(dividedEdges, edge, vertexIndex);
-                }
-            }
+            dividedEdges = algorithm.iterate(dividedEdges);
         }
+
+//        for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
+//            List<DividedEdge> current = dividedEdges.stream().collect(toList());
+//
+//            for (int edgeIndex = 0; edgeIndex<dividedEdges.size(); edgeIndex++) {
+//                List<Vertex> tmp = new ArrayList<>();
+//                tmp.add(current.get(edgeIndex).getStartingVertex());
+//
+//                for (int vertexIndex = 1; vertexIndex < algorithm.getNumberOfSegments(); vertexIndex++) {
+//                    tmp.add(algorithm.applyForces(current, current.get(edgeIndex), vertexIndex));
+//                }
+//                tmp.add(current.get(edgeIndex).getEndingVertex());
+//                dividedEdges.get(edgeIndex).setDivisionPoints(tmp);
+//            }
+//        }
 
 
         dividedEdges.forEach(edge -> lines.addAll(controller.dividedEdgeToLine(edge)));
