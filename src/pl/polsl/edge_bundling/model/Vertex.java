@@ -3,11 +3,13 @@ package pl.polsl.edge_bundling.model;
 
 import java.util.Date;
 
-public class Vertex implements Comparable<Vertex>{
+public class Vertex implements Comparable<Vertex> {
 
     private Date timestamp;
 
-    private int x;
+    private double x;
+
+    private double y;
 
     public Date getTimestamp() {
         return timestamp;
@@ -17,23 +19,27 @@ public class Vertex implements Comparable<Vertex>{
         this.timestamp = timestamp;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public Vertex applyForce(Force force) {
+//        x+= force.getX();
+//        y+= force.getY();
+        return new Vertex(x + force.getX(),y + force.getY());
     }
 
-    private int y;
+    public void setY(double y) {
+        this.y = y;
+    }
 
     public Vertex(Date timestamp, int x, int y) {
         this.timestamp = timestamp;
@@ -42,6 +48,18 @@ public class Vertex implements Comparable<Vertex>{
     }
 
     public Vertex() {
+    }
+
+    public Vertex(Vertex template){
+        this.timestamp = template.getTimestamp();
+        this.x = template.getX();
+        this.y = template.getY();
+    }
+
+    public Vertex(double x, double y) {
+        this.timestamp = null;
+        this.x = x;
+        this.y = y;
     }
 
     public Vertex(String[] entry) {
@@ -53,5 +71,18 @@ public class Vertex implements Comparable<Vertex>{
     @Override
     public int compareTo(Vertex vertex) {
         return getTimestamp().compareTo(vertex.getTimestamp());
+    }
+
+    public double distanceTo(Vertex vertex) {
+        return Math.sqrt((vertex.getY() - this.getY()) * (vertex.getY() - this.getY()) +
+                (vertex.getX() - this.getX()) * (vertex.getX() - this.getX()));
+    }
+
+    public double xDistanceTo(Vertex vertex) {
+        return vertex.getX() - this.getX();
+    }
+
+    public double yDistanceTo(Vertex vertex) {
+        return vertex.getY() - this.getY();
     }
 }
