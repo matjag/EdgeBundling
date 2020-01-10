@@ -44,9 +44,9 @@ public class EdgeBundlingGUI {
             //todo
         }
         edges.forEach(edge -> {
-            gc.fillOval(edge.getStartX() - 2, edge.getStartY() - 2, 4, 4);
+//            gc.fillOval(edge.getStartX() - 2, edge.getStartY() - 2, 4, 4);
             gc.strokeLine(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY());
-            gc.fillOval(edge.getEndX() - 2, edge.getEndY() - 2, 4, 4);
+//            gc.fillOval(edge.getEndX() - 2, edge.getEndY() - 2, 4, 4);
         });
         stage.setMinWidth(100);
         stage.setMinHeight(100);

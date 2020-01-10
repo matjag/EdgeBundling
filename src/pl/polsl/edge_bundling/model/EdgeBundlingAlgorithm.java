@@ -40,8 +40,8 @@ public class EdgeBundlingAlgorithm {
         Vertex currentVertex = dividedEdge.getDivisionPoints().get(vertexIndex);
         dividedEdges.forEach(edge -> {
             if (edge != dividedEdge) {//todo potential bottleneck
-                double xDistance = currentVertex.xDistanceTo(edge.getDivisionPoints().get(vertexIndex));
-                double yDistance = currentVertex.yDistanceTo(edge.getDivisionPoints().get(vertexIndex));
+                double xDistance = Math.round(currentVertex.xDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
+                double yDistance = Math.round(currentVertex.yDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
                 if (xDistance != 0) {
                     force.setX(force.getX() + (1.0 / xDistance));
                 }
@@ -56,7 +56,7 @@ public class EdgeBundlingAlgorithm {
 
     public Force calculateForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         Force force = new Force(0, 0);
-//        force.combine(calculateSpringForce(dividedEdge, vertexIndex));
+        force.combine(calculateSpringForce(dividedEdge, vertexIndex));
         force.combine(calculateElectrostaticForce(dividedEdges, dividedEdge, vertexIndex));
         return force;
     }

@@ -5,6 +5,7 @@ import pl.polsl.edge_bundling.model.DividedEdge;
 import pl.polsl.edge_bundling.model.Edge;
 import pl.polsl.edge_bundling.model.Vertex;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,5 +28,16 @@ public class Controller {
         }
 
         return lines;
+    }
+
+    public Set<Edge> resolveShortEdges(Set<Edge> edges, double threshold){
+        Set<Edge> shortEdges = new HashSet<>();
+        for(Edge edge : edges){
+            if(edge.getLength() < threshold){
+                shortEdges.add(edge);
+            }
+        }
+        edges.removeAll(shortEdges);
+        return shortEdges;
     }
 }
