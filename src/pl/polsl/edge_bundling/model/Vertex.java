@@ -31,10 +31,10 @@ public class Vertex implements Comparable<Vertex> {
         return y;
     }
 
-    public Vertex applyForce(Force force) {
-//        x+= force.getX();
-//        y+= force.getY();
-        return new Vertex(x + force.getX(), y + force.getY());
+    public void applyForce(Force force) {
+        x+= force.getX();
+        y+= force.getY();
+//        return new Vertex(x + force.getX(), y + force.getY());
     }
 
     public void setY(double y) {
@@ -64,10 +64,8 @@ public class Vertex implements Comparable<Vertex> {
 
     public Vertex(String[] entry) {
         this.timestamp = new Date(Long.parseLong(entry[0]));
-        this.x = Double.parseDouble(entry[1]) * 5 + 900;
-        this.y = Double.parseDouble(entry[2]) * 5 + 900;
-//        this.x = Integer.parseInt(entry[1]);
-//        this.y = Integer.parseInt(entry[2]);
+        this.x = Integer.parseInt(entry[1]);
+        this.y = Integer.parseInt(entry[2]);
     }
 
     @Override

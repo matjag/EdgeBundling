@@ -38,21 +38,34 @@ public class EdgeBundlingAlgorithm {
         }
         Force force = new Force(0, 0);
         Vertex currentVertex = dividedEdge.getDivisionPoints().get(vertexIndex);
-        dividedEdges.forEach(edge -> {
-            if (edge != dividedEdge) {//todo potential bottleneck
-                double xDistance = Math.round(currentVertex.xDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
-                double yDistance = Math.round(currentVertex.yDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
-                double compatibility = calcCompatibility(dividedEdge, edge);
-                if (xDistance != 0) {
-//                    force.setX(force.getX() + (1.0 / xDistance));
-                    force.setX(force.getX() + compatibility / xDistance);
-                }
-                if (yDistance != 0) {
-//                    force.setY(force.getY() + (1.0 / yDistance));
-                    force.setY(force.getY() + (compatibility / yDistance));
-                }
+
+        dividedEdge.getCompatibleEdges().forEach(index -> {
+            double xDistance = Math.round(currentVertex.xDistanceTo(dividedEdges.get(index).getDivisionPoints().get(vertexIndex)));
+            double yDistance = Math.round(currentVertex.yDistanceTo(dividedEdges.get(index).getDivisionPoints().get(vertexIndex)));
+//                    double compatibility = calcCompatibility(dividedEdge, edge);
+            if (xDistance != 0) {
+                force.setX(force.getX() + (1.0 / xDistance));
+//                        force.setX(force.getX() + compatibility / xDistance);
+            }
+            if (yDistance != 0) {
+                force.setY(force.getY() + (1.0 / yDistance));
+//                        force.setY(force.getY() + (compatibility / yDistance));
             }
         });
+
+//        dividedEdges.forEach(edge -> {
+//                double xDistance = Math.round(currentVertex.xDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
+//                double yDistance = Math.round(currentVertex.yDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
+////                double compatibility = calcCompatibility(dividedEdge, edge);
+//                if (xDistance != 0) {
+//                    force.setX(force.getX() + (1.0 / xDistance));
+////                    force.setX(force.getX() + compatibility / xDistance);
+//                }
+//                if (yDistance != 0) {
+//                    force.setY(force.getY() + (1.0 / yDistance));
+////                    force.setY(force.getY() + (compatibility / yDistance));
+//                }
+//        });
 
         return force;
     }
@@ -72,24 +85,26 @@ public class EdgeBundlingAlgorithm {
         }
 
         for (int edgeIndex = 0; edgeIndex < dividedEdges.size(); edgeIndex++) {
-            List<Vertex> tmp = new ArrayList<>();
-            tmp.add(dividedEdges.get(edgeIndex).getStartingVertex());
+//            List<Vertex> tmp = new ArrayList<>();
+//            tmp.add(dividedEdges.get(edgeIndex).getStartingVertex());
 
             for (int vertexIndex = 1; vertexIndex < numberOfSegments; vertexIndex++) {
-                tmp.add(applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex));
+                applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex);
+//                tmp.add(applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex));
             }
-            tmp.add(dividedEdges.get(edgeIndex).getEndingVertex());
-            nextIteration.get(edgeIndex).setDivisionPoints(tmp);
+//            tmp.add(dividedEdges.get(edgeIndex).getEndingVertex());
+//            nextIteration.get(edgeIndex).setDivisionPoints(tmp);
         }
 
-        return nextIteration;
+        return dividedEdges;
     }
 
 
-    public Vertex applyForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
+    public void applyForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         Force force = calculateForces(dividedEdges, dividedEdge, vertexIndex);
         force.scale(initialStep);
-        return dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
+        dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
+//        return dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
     }
 
     public double calcCompatibility(Edge edge1, Edge edge2) {
@@ -107,8 +122,8 @@ public class EdgeBundlingAlgorithm {
         double length1 = edge1.getLength();
         double length2 = edge2.getLength();
         double average = (length1 + length2) / 2.0;
-
-        return 2.0 / (average / Math.min(length1, length2) + Math.max(length1, length2) / average); //todo not sure if formula is fine(taken from git)
+        double result = 2.0 / (average / Math.min(length1, length2) + Math.max(length1, length2) / average);
+        return result; //todo not sure if formula is fine(taken from git)
     }
 
     private double calcPositionCompatibility(Edge edge1, Edge edge2) {
@@ -117,6 +132,18 @@ public class EdgeBundlingAlgorithm {
         double average = (length1 + length2) / 2.0;
 
         return average / (average + edge1.getMidpoint().distanceTo(edge2.getMidpoint()));
+    }
+
+    public void fillCompatibilities(List<DividedEdge> dividedEdges, double threshold) {
+        for (DividedEdge dividedEdge : dividedEdges) {
+
+            for (int edgeIndex = 0; edgeIndex < dividedEdges.size(); edgeIndex++) {
+                if (calcCompatibility(dividedEdge, dividedEdges.get(edgeIndex)) >= threshold &&
+                        dividedEdges.get(edgeIndex) != dividedEdge) {
+                    dividedEdge.addCompatibleEdgeIndex(edgeIndex);
+                }
+            }
+        }
     }
 
     private double calcVisibilityCompatibility(Edge edge1, Edge edge2) {

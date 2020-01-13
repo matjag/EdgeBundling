@@ -28,14 +28,14 @@ public class Main extends Application {
         List<DividedEdge> dividedEdges = new ArrayList<>();
         Set<Line> lines = new HashSet<>();
 
-//        for (int i = 10; i < 30; i++) {
-//            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
-//        }
-//
-//        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 100)));
-//        edges.add(new Edge(new Vertex(200, 150), new Vertex(1100, 150)));
-//        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 500)));
+        for (int i = 10; i < 40; i++) {
+            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+        }
 ////
+//        edges.add(new Edge(new Vertex(100, 1600), new Vertex(1000, 1600)));
+//        edges.add(new Edge(new Vertex(200, 1650), new Vertex(1100, 1650)));
+//        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 500)));
+//
 //        edges.add(new Edge(new Vertex(100, 200), new Vertex(1000, 200)));
 //        edges.add(new Edge(new Vertex(200, 250), new Vertex(1100, 250)));
 //        edges.add(new Edge(new Vertex(100, 300), new Vertex(1000, 300)));
@@ -43,7 +43,7 @@ public class Main extends Application {
 //        edges.add(new Edge(new Vertex(100, 400), new Vertex(1000, 100)));
 //        edges.add(new Edge(new Vertex(200, 550), new Vertex(1100, 150)));
 
-        edges.addAll(dataLoader.loadFromCsv("data/processed.csv"));
+//        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
 //        Set<Vertex> vertices = new HashSet<>();
 //
 //        edges.forEach(edge -> {
@@ -64,7 +64,14 @@ public class Main extends Application {
 //            });
 //        });
 
+        System.out.println("Total number of edges:\t" + edges.size());
+
         Set<Edge> shortEdges = controller.resolveShortEdges(edges, algorithm.getNumberOfSegments());
+
+        System.out.println("Resolving short edges:\t" + shortEdges.size());
+        System.out.println("Edges left:\t" + edges.size());
+        System.out.println("Bundling...");
+        long startTime = System.nanoTime();
 
         for (Edge edge : edges) {
             dividedEdges.add(new DividedEdge(edge, algorithm.getNumberOfSegments(), algorithm.getSpringConstant()));
@@ -74,6 +81,7 @@ public class Main extends Application {
         int I = 50;
         int C = 6;
 
+        algorithm.fillCompatibilities(dividedEdges, 0.4);
 
         for (int mateusz = 0; mateusz < C; mateusz++) {
             for (int i = 0; i < I; i++) {
@@ -106,6 +114,10 @@ public class Main extends Application {
 
         edgeBundlingGUI.setEdges(lines);
         edgeBundlingGUI.start(stage);
+
+        long endTime = System.nanoTime();
+        System.out.println("Time elapsed:\t" + (endTime - startTime)/1000000000.0);
+
     }
 }
 //    @Override
