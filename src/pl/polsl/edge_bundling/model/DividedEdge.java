@@ -49,6 +49,20 @@ public class DividedEdge extends Edge {
         localSpringConstant = globalSpringConstant / (getLength() * numberOfSegments);
     }
 
+    public void doubleDivisionPoints() {
+        List<Vertex> newDivisionPoints = new ArrayList<>();
+        newDivisionPoints.add(getStartingVertex());
+        for (int i = 1; i < divisionPoints.size(); i++) {
+            Vertex previous = divisionPoints.get(i-1);
+            Vertex current = divisionPoints.get(i);
+            double y = (previous.getY() + current.getY())/2.0;
+            double x = (previous.getX() + current.getX())/2.0;
+            newDivisionPoints.add(new Vertex(x,y));
+            newDivisionPoints.add(current);
+        }
+        this.divisionPoints = newDivisionPoints;
+    }
+
     public List<Vertex> getDivisionPoints() {
         return divisionPoints;
     }

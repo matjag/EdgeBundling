@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import pl.polsl.edge_bundling.model.Edge;
 
 import java.io.File;
 import java.io.FileInputStream;

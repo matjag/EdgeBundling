@@ -11,14 +11,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public class Main extends Application {
     private final EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
     private final Controller controller = new Controller();
-    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(1, 20, 30, 5);
+    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.1, 5, 30, 0.1);
 
     public static void main(String[] args) {
         launch(args);
@@ -31,9 +28,9 @@ public class Main extends Application {
         List<DividedEdge> dividedEdges = new ArrayList<>();
         Set<Line> lines = new HashSet<>();
 
-        for (int i = 10; i < 66; i++) {
-            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
-        }
+//        for (int i = 10; i < 30; i++) {
+//            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+//        }
 //
 //        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 100)));
 //        edges.add(new Edge(new Vertex(200, 150), new Vertex(1100, 150)));
@@ -46,7 +43,7 @@ public class Main extends Application {
 //        edges.add(new Edge(new Vertex(100, 400), new Vertex(1000, 100)));
 //        edges.add(new Edge(new Vertex(200, 550), new Vertex(1100, 150)));
 
-//        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
+        edges.addAll(dataLoader.loadFromCsv("data/processed.csv"));
 //        Set<Vertex> vertices = new HashSet<>();
 //
 //        edges.forEach(edge -> {
@@ -69,12 +66,22 @@ public class Main extends Application {
 
         Set<Edge> shortEdges = controller.resolveShortEdges(edges, algorithm.getNumberOfSegments());
 
-        for(Edge edge : edges){
+        for (Edge edge : edges) {
             dividedEdges.add(new DividedEdge(edge, algorithm.getNumberOfSegments(), algorithm.getSpringConstant()));
         }
 
-        for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
-            dividedEdges = algorithm.iterate(dividedEdges);
+
+        int I = 50;
+        int C = 6;
+
+
+        for (int mateusz = 0; mateusz < C; mateusz++) {
+            for (int i = 0; i < I; i++) {
+                dividedEdges = algorithm.iterate(dividedEdges);
+            }
+            dividedEdges.forEach(DividedEdge::doubleDivisionPoints);
+            I *= 0.66;
+            algorithm.setInitialStep(algorithm.getInitialStep()*0.5);
         }
 
 //        for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {

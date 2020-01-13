@@ -42,11 +42,14 @@ public class EdgeBundlingAlgorithm {
             if (edge != dividedEdge) {//todo potential bottleneck
                 double xDistance = Math.round(currentVertex.xDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
                 double yDistance = Math.round(currentVertex.yDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
+                double compatibility = calcCompatibility(dividedEdge, edge);
                 if (xDistance != 0) {
-                    force.setX(force.getX() + (1.0 / xDistance));
+//                    force.setX(force.getX() + (1.0 / xDistance));
+                    force.setX(force.getX() + compatibility / xDistance);
                 }
                 if (yDistance != 0) {
-                    force.setY(force.getY() + (1.0 / yDistance));
+//                    force.setY(force.getY() + (1.0 / yDistance));
+                    force.setY(force.getY() + (compatibility / yDistance));
                 }
             }
         });
@@ -89,6 +92,41 @@ public class EdgeBundlingAlgorithm {
         return dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
     }
 
+    public double calcCompatibility(Edge edge1, Edge edge2) {
+        return calcAngleCompatibility(edge1, edge2) *
+                calcPositionCompatibility(edge1, edge2) *
+                calcScaleCompatibility(edge1, edge2) *
+                calcVisibilityCompatibility(edge1, edge2);
+    }
+
+    private double calcAngleCompatibility(Edge edge1, Edge edge2) {
+        return Math.abs(scalarProduct(edge1, edge2) / (edge1.getLength() * edge2.getLength()));
+    }
+
+    private double calcScaleCompatibility(Edge edge1, Edge edge2) {
+        double length1 = edge1.getLength();
+        double length2 = edge2.getLength();
+        double average = (length1 + length2) / 2.0;
+
+        return 2.0 / (average / Math.min(length1, length2) + Math.max(length1, length2) / average); //todo not sure if formula is fine(taken from git)
+    }
+
+    private double calcPositionCompatibility(Edge edge1, Edge edge2) {
+        double length1 = edge1.getLength();
+        double length2 = edge2.getLength();
+        double average = (length1 + length2) / 2.0;
+
+        return average / (average + edge1.getMidpoint().distanceTo(edge2.getMidpoint()));
+    }
+
+    private double calcVisibilityCompatibility(Edge edge1, Edge edge2) {
+        return 1.0;//todo
+    }
+
+
+    private double scalarProduct(Edge edge1, Edge edge2) {
+        return edge1.getXLength() * edge2.getXLength() + edge1.getYLength() * edge2.getYLength();
+    }
 
     public double getInitialStep() {
         return initialStep;

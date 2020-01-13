@@ -14,6 +14,11 @@ public class Edge {
         this.endingVertex = endingVertex;
     }
 
+    public Vertex getMidpoint() {
+        return new Vertex((startingVertex.getX() + endingVertex.getX()) / 2.0,
+                (startingVertex.getY() + endingVertex.getY()) / 2.0);
+    }
+
     public Vertex getStartingVertex() {
         return startingVertex;
     }
@@ -33,5 +38,13 @@ public class Edge {
     //todo int?
     public double getLength() {
         return startingVertex.distanceTo(endingVertex);
+    }
+
+    public double getYLength() {
+        return startingVertex.yDistanceTo(endingVertex);
+    }
+
+    public double getXLength() {
+        return startingVertex.xDistanceTo(endingVertex);
     }
 }
