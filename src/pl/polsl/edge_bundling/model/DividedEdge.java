@@ -7,6 +7,8 @@ public class DividedEdge extends Edge {
 
     private List<Vertex> divisionPoints = new ArrayList<>();
 
+    private List<Integer> compatibleEdges = new ArrayList<>();
+
     private double localSpringConstant;
 
     public DividedEdge(List<Vertex> divisionPoints, double localSpringConstant) {
@@ -14,10 +16,19 @@ public class DividedEdge extends Edge {
         this.localSpringConstant = localSpringConstant;
     }
 
+    public void addCompatibleEdgeIndex(int index) {
+        compatibleEdges.add(index);
+    }
+
+    public List<Integer> getCompatibleEdges() {
+        return compatibleEdges;
+    }
+
     public DividedEdge(DividedEdge template) {
         this.setStartingVertex(new Vertex(template.getStartingVertex()));
         this.setEndingVertex(new Vertex(template.getEndingVertex()));
         this.localSpringConstant = template.getLocalSpringConstant();
+        this.compatibleEdges = template.getCompatibleEdges();
         for (Vertex vertex : template.getDivisionPoints()) {
             this.divisionPoints.add(new Vertex(vertex));
         }
@@ -47,6 +58,21 @@ public class DividedEdge extends Edge {
         divisionPoints.add(endingVertex);
 
         localSpringConstant = globalSpringConstant / (getLength() * numberOfSegments);
+    }
+
+    public void doubleDivisionPoints() {
+        List<Vertex> newDivisionPoints = new ArrayList<>();
+        newDivisionPoints.add(getStartingVertex());
+        for (int i = 1; i < divisionPoints.size(); i++) {
+            Vertex previous = divisionPoints.get(i-1);
+            Vertex current = divisionPoints.get(i);
+            double y = (previous.getY() + current.getY())/2.0;
+            double x = (previous.getX() + current.getX())/2.0;
+            newDivisionPoints.add(new Vertex(x,y));
+            newDivisionPoints.add(current);
+        }
+        this.divisionPoints = newDivisionPoints;
+//        localSpringConstant *= 0.5;
     }
 
     public List<Vertex> getDivisionPoints() {

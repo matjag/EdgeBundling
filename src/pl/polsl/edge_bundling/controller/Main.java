@@ -11,14 +11,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public class Main extends Application {
     private final EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
     private final Controller controller = new Controller();
-    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(1, 20, 30, 5);
+    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.5, 5, 30, 0.01);
 
     public static void main(String[] args) {
         launch(args);
@@ -32,13 +29,13 @@ public class Main extends Application {
         Set<Line> lines = new HashSet<>();
 
         for (int i = 10; i < 66; i++) {
-            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+            edges.addAll(dataLoader.loadFromCsv("data/animal-11/A" + i + ".csv"));
         }
-//
-//        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 100)));
-//        edges.add(new Edge(new Vertex(200, 150), new Vertex(1100, 150)));
-//        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 500)));
 ////
+//        edges.add(new Edge(new Vertex(100, 200), new Vertex(1000, 200)));
+//        edges.add(new Edge(new Vertex(200, 220), new Vertex(1100, 220)));
+//        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 500)));
+//
 //        edges.add(new Edge(new Vertex(100, 200), new Vertex(1000, 200)));
 //        edges.add(new Edge(new Vertex(200, 250), new Vertex(1100, 250)));
 //        edges.add(new Edge(new Vertex(100, 300), new Vertex(1000, 300)));
@@ -46,7 +43,7 @@ public class Main extends Application {
 //        edges.add(new Edge(new Vertex(100, 400), new Vertex(1000, 100)));
 //        edges.add(new Edge(new Vertex(200, 550), new Vertex(1100, 150)));
 
-//        edges.addAll(dataLoader.loadFromCsv("data/test.csv"));
+//        edges.addAll(dataLoader.loadFromCsv("data/processed.csv"));
 //        Set<Vertex> vertices = new HashSet<>();
 //
 //        edges.forEach(edge -> {
@@ -67,15 +64,33 @@ public class Main extends Application {
 //            });
 //        });
 
+        System.out.println("Total number of edges:\t" + edges.size());
+
         Set<Edge> shortEdges = controller.resolveShortEdges(edges, algorithm.getNumberOfSegments());
 
-        for(Edge edge : edges){
-            dividedEdges.add(new DividedEdge(edge, algorithm.getNumberOfSegments(), algorithm.getSpringConstant()));
+        System.out.println("Resolving short edges:\t" + shortEdges.size());
+        System.out.println("Edges left:\t" + edges.size());
+        System.out.println("Bundling...");
+        long startTime = System.nanoTime();
+
+        for (Edge edge : edges) {
+            dividedEdges.add(new DividedEdge(edge, 2, algorithm.getSpringConstant()));
         }
 
-        for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
-            dividedEdges = algorithm.iterate(dividedEdges);
-        }
+
+        int I = 50;
+        int C = 6;
+
+        algorithm.fillCompatibilities(dividedEdges, 0.2);
+
+//        for (int cycle = 0; cycle < C; cycle++) {
+//            for (int i = 0; i < I; i++) {
+//                dividedEdges = algorithm.iterate(dividedEdges);
+//            }
+//            dividedEdges.forEach(DividedEdge::doubleDivisionPoints);
+//            I *= 0.66;
+//            algorithm.setInitialStep(algorithm.getInitialStep()*0.5);
+//        }
 
 //        for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
 //            List<DividedEdge> current = dividedEdges.stream().collect(toList());
@@ -99,6 +114,10 @@ public class Main extends Application {
 
         edgeBundlingGUI.setEdges(lines);
         edgeBundlingGUI.start(stage);
+
+        long endTime = System.nanoTime();
+        System.out.println("Time elapsed:\t" + (endTime - startTime)/1000000000.0);
+
     }
 }
 //    @Override
