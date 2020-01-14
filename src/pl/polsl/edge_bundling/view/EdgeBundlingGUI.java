@@ -36,7 +36,7 @@ public class EdgeBundlingGUI {
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         Scene scene = new Scene(scrollPane);
-        File file = new File("data/animal.jpg");
+        File file = new File("data/animal-11/animal-11.jpg");
 
         try {
             FileInputStream fileInputStream = new FileInputStream(file);

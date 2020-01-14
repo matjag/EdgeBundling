@@ -29,7 +29,7 @@ public class Main extends Application {
         Set<Line> lines = new HashSet<>();
 
         for (int i = 10; i < 40; i++) {
-            edges.addAll(dataLoader.loadFromCsv("data/A" + i + ".csv"));
+            edges.addAll(dataLoader.loadFromCsv("data/animal-11/A" + i + ".csv"));
         }
 ////
 //        edges.add(new Edge(new Vertex(100, 1600), new Vertex(1000, 1600)));
