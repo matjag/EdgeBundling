@@ -64,6 +64,8 @@ public class Vertex implements Comparable<Vertex> {
 
     public Vertex(String[] entry) {
         this.timestamp = new Date(Long.parseLong(entry[0]));
+//        this.x=Double.parseDouble(entry[1]) * 5+ 900;
+//        this.y=Double.parseDouble(entry[2]) * 5+ 900;
         this.x = Integer.parseInt(entry[1]);
         this.y = Integer.parseInt(entry[2]);
     }

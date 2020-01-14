@@ -18,7 +18,7 @@ public class DataLoader {
             //Some error logging todo
         }
 
-        vertices.removeIf(vertex -> vertex.getY() < 0 || vertex.getX() < 0 || vertex.getX() > 2288 || vertex.getY() > 1712); //todo hardcoded property values
+        vertices.removeIf(vertex -> vertex.getY() <= 0 || vertex.getX() <= 0 || vertex.getX() > 2288 || vertex.getY() > 1712); //todo hardcoded property values
         Collections.sort(vertices);//todo needed?
 
         return verticesToEdges(vertices);
