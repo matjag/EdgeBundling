@@ -15,7 +15,7 @@ import java.util.Set;
 public class Main extends Application {
     private final EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
     private final Controller controller = new Controller();
-    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.5, 5, 30, 0.01);
+    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.8, 5, 30, 0.1);
 
     public static void main(String[] args) {
         launch(args);
@@ -28,14 +28,14 @@ public class Main extends Application {
         List<DividedEdge> dividedEdges = new ArrayList<>();
         Set<Line> lines = new HashSet<>();
 
-        for (int i = 10; i < 66; i++) {
-            edges.addAll(dataLoader.loadFromCsv("data/animal-11/A" + i + ".csv"));
-        }
+//        for (int i = 10; i < 66; i++) {
+//            edges.addAll(dataLoader.loadFromCsv("data/animal-11/A" + i + ".csv"));
+//        }
 ////
-//        edges.add(new Edge(new Vertex(100, 200), new Vertex(1000, 200)));
-//        edges.add(new Edge(new Vertex(200, 220), new Vertex(1100, 220)));
+//        edges.add(new Edge(new Vertex(100, 100), new Vertex(600, 600)));
+//        edges.add(new Edge(new Vertex(100, 400), new Vertex(600, 600)));
 //        edges.add(new Edge(new Vertex(100, 100), new Vertex(1000, 500)));
-//
+
 //        edges.add(new Edge(new Vertex(100, 200), new Vertex(1000, 200)));
 //        edges.add(new Edge(new Vertex(200, 250), new Vertex(1100, 250)));
 //        edges.add(new Edge(new Vertex(100, 300), new Vertex(1000, 300)));
@@ -43,7 +43,7 @@ public class Main extends Application {
 //        edges.add(new Edge(new Vertex(100, 400), new Vertex(1000, 100)));
 //        edges.add(new Edge(new Vertex(200, 550), new Vertex(1100, 150)));
 
-//        edges.addAll(dataLoader.loadFromCsv("data/processed.csv"));
+        edges.addAll(dataLoader.loadFromCsv("data/processed.csv"));
 //        Set<Vertex> vertices = new HashSet<>();
 //
 //        edges.forEach(edge -> {
@@ -78,19 +78,19 @@ public class Main extends Application {
         }
 
 
-        int I = 50;
+        int I = 60;
         int C = 6;
 
-        algorithm.fillCompatibilities(dividedEdges, 0.2);
-
-//        for (int cycle = 0; cycle < C; cycle++) {
-//            for (int i = 0; i < I; i++) {
-//                dividedEdges = algorithm.iterate(dividedEdges);
-//            }
-//            dividedEdges.forEach(DividedEdge::doubleDivisionPoints);
-//            I *= 0.66;
-//            algorithm.setInitialStep(algorithm.getInitialStep()*0.5);
-//        }
+        algorithm.fillCompatibilities(dividedEdges, 0.6);
+//
+        for (int cycle = 0; cycle < C; cycle++) {
+            for (int i = 0; i < I; i++) {
+                dividedEdges = algorithm.iterate(dividedEdges);
+            }
+            dividedEdges.forEach(DividedEdge::doubleDivisionPoints);
+            I *= 0.66;
+            algorithm.setInitialStep(algorithm.getInitialStep()*0.5);
+        }
 
 //        for (int i = 0; i < algorithm.getNumberOfIterations(); i++) {
 //            List<DividedEdge> current = dividedEdges.stream().collect(toList());

@@ -44,7 +44,7 @@ public class EdgeBundlingGUI {
 //        scrollPane.setFitToWidth(true);
 //        scrollPane.setFitToHeight(true);
 //        Scene scene = new Scene(scrollPane);
-        File file = new File("data/animal-11/animal.jpg");
+        File file = new File("data/animal-21/animal.jpg");
 
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -71,9 +71,9 @@ public class EdgeBundlingGUI {
             });
             stage.setMinWidth(100);
             stage.setMinHeight(100);
-            this.zoom(pane);
-//            stage.setScene(scene);
-//            stage.show();
+//            this.zoom(pane);
+            stage.setScene(scene);
+            stage.show();
 
             SimpleDateFormat formatter = new SimpleDateFormat("HHmmss");
             Date date = new Date();
@@ -98,23 +98,23 @@ public class EdgeBundlingGUI {
     }
 
 
-    private void zoom(Pane pane) {
-        pane.setOnScroll(
-                new EventHandler<ScrollEvent>() {
-                    @Override
-                    public void handle(ScrollEvent event) {
-                        double zoomFactor = 1.05;
-                        double deltaY = event.getDeltaY();
-
-                        if (deltaY < 0) {
-                            zoomFactor = 0.95;
-                        }
-                        pane.setScaleX(pane.getScaleX() * zoomFactor);
-                        pane.setScaleY(pane.getScaleY() * zoomFactor);
-                        event.consume();
-                    }
-                });
-
-    }
+//    private void zoom(Pane pane) {
+//        pane.setOnScroll(
+//                new EventHandler<ScrollEvent>() {
+//                    @Override
+//                    public void handle(ScrollEvent event) {
+//                        double zoomFactor = 1.05;
+//                        double deltaY = event.getDeltaY();
+//
+//                        if (deltaY < 0) {
+//                            zoomFactor = 0.95;
+//                        }
+//                        pane.setScaleX(pane.getScaleX() * zoomFactor);
+//                        pane.setScaleY(pane.getScaleY() * zoomFactor);
+//                        event.consume();
+//                    }
+//                });
+//
+//    }
 }
 
