@@ -23,10 +23,6 @@ public class Vertex implements Comparable<Vertex> {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
     public double getY() {
         return y;
     }
@@ -34,20 +30,6 @@ public class Vertex implements Comparable<Vertex> {
     public void applyForce(Force force) {
         x+= force.getX();
         y+= force.getY();
-//        return new Vertex(x + force.getX(), y + force.getY());
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public Vertex(Date timestamp, int x, int y) {
-        this.timestamp = timestamp;
-        this.x = x;
-        this.y = y;
-    }
-
-    public Vertex() {
     }
 
     public Vertex(Vertex template) {
@@ -64,8 +46,6 @@ public class Vertex implements Comparable<Vertex> {
 
     public Vertex(String[] entry) {
         this.timestamp = new Date(Long.parseLong(entry[0]));
-//        this.x=Double.parseDouble(entry[1]) * 5+ 900;
-//        this.y=Double.parseDouble(entry[2]) * 5+ 900;
         this.x = Integer.parseInt(entry[1]);
         this.y = Integer.parseInt(entry[2]);
     }

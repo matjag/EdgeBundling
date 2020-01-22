@@ -53,20 +53,6 @@ public class EdgeBundlingAlgorithm {
             }
         });
 
-//        dividedEdges.forEach(edge -> {
-//                double xDistance = Math.round(currentVertex.xDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
-//                double yDistance = Math.round(currentVertex.yDistanceTo(edge.getDivisionPoints().get(vertexIndex)));
-////                double compatibility = calcCompatibility(dividedEdge, edge);
-//                if (xDistance != 0) {
-//                    force.setX(force.getX() + (1.0 / xDistance));
-////                    force.setX(force.getX() + compatibility / xDistance);
-//                }
-//                if (yDistance != 0) {
-//                    force.setY(force.getY() + (1.0 / yDistance));
-////                    force.setY(force.getY() + (compatibility / yDistance));
-//                }
-//        });
-
         return force;
     }
 
@@ -122,8 +108,7 @@ public class EdgeBundlingAlgorithm {
         double length1 = edge1.getLength();
         double length2 = edge2.getLength();
         double average = (length1 + length2) / 2.0;
-        double result = 2.0 / (average / Math.min(length1, length2) + Math.max(length1, length2) / average);
-        return result; //todo not sure if formula is fine(taken from git)
+        return 2.0 / (average / Math.min(length1, length2) + Math.max(length1, length2) / average);
     }
 
     private double calcPositionCompatibility(Edge edge1, Edge edge2) {
