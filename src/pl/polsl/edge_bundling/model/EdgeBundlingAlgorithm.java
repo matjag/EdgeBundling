@@ -5,22 +5,7 @@ import java.util.List;
 
 public class EdgeBundlingAlgorithm {
 
-//    private double initialStep;
-
-//    private int numberOfIterations;
-//
-//    private int numberOfSegments;
-//
-//    private double springConstant;
-
-//    public EdgeBundlingAlgorithm(double initialStep, int numberOfIterations, int numberOfSegments, double springConstant) {
-//        this.initialStep = initialStep;
-//        this.numberOfIterations = numberOfIterations;
-//        this.numberOfSegments = numberOfSegments;
-//        this.springConstant = springConstant;
-//    }
-
-    public Force calculateSpringForce(DividedEdge dividedEdge, int vertexIndex) {
+    private Force calculateSpringForce(DividedEdge dividedEdge, int vertexIndex) {
         List<Vertex> vertices = dividedEdge.getDivisionPoints();
         Vertex previousVertex = vertices.get(vertexIndex - 1);
         Vertex currentVertex = vertices.get(vertexIndex);
@@ -32,7 +17,7 @@ public class EdgeBundlingAlgorithm {
         return new Force(x, y);
     }
 
-    public Force calculateElectrostaticForce(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
+    private Force calculateElectrostaticForce(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         if (vertexIndex == 0 || vertexIndex == dividedEdge.getDivisionPoints().size()) {
             throw new IllegalArgumentException();//todo
         }
@@ -42,21 +27,18 @@ public class EdgeBundlingAlgorithm {
         dividedEdge.getCompatibleEdges().forEach(index -> {
             double xDistance = Math.round(currentVertex.xDistanceTo(dividedEdges.get(index).getDivisionPoints().get(vertexIndex)));
             double yDistance = Math.round(currentVertex.yDistanceTo(dividedEdges.get(index).getDivisionPoints().get(vertexIndex)));
-//                    double compatibility = calcCompatibility(dividedEdge, edge);
             if (xDistance != 0) {
                 force.setX(force.getX() + (1.0 / xDistance));
-//                        force.setX(force.getX() + compatibility / xDistance);
             }
             if (yDistance != 0) {
                 force.setY(force.getY() + (1.0 / yDistance));
-//                        force.setY(force.getY() + (compatibility / yDistance));
             }
         });
 
         return force;
     }
 
-    public Force calculateForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
+    private Force calculateForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         Force force = new Force(0, 0);
         force.combine(calculateSpringForce(dividedEdge, vertexIndex));
         force.combine(calculateElectrostaticForce(dividedEdges, dividedEdge, vertexIndex));

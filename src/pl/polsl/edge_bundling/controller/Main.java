@@ -2,7 +2,6 @@ package pl.polsl.edge_bundling.controller;
 
 
 import javafx.application.Application;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import pl.polsl.edge_bundling.model.DataLoader;
@@ -29,7 +28,8 @@ public class Main extends Application {
             6,
             0.1,
             30
-            );
+    );
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -61,8 +61,7 @@ public class Main extends Application {
 
         System.out.println("Total number of edges:\t" + edges.size());
 
-        Set<Edge> shortEdges = controller.resolveShortEdges(edges, parameters.getShortEdgeThreshold())
-                ;
+        Set<Edge> shortEdges = controller.resolveShortEdges(edges, parameters.getShortEdgeThreshold());
 
         System.out.println("Resolving short edges:\t" + shortEdges.size());
         System.out.println("Edges left:\t" + edges.size());
@@ -73,9 +72,6 @@ public class Main extends Application {
             dividedEdges.add(new DividedEdge(edge, 2, parameters.getGlobalSpringConstant()));
         }
 
-
-//        int I = 50;
-//        int C = 6;
 
         algorithm.fillCompatibilities(dividedEdges, parameters.getCompatibilityThreshold());
 
@@ -98,6 +94,5 @@ public class Main extends Application {
 
         long endTime = System.nanoTime();
         System.out.println("Time elapsed:\t" + (endTime - startTime) / 1000000000.0);
-
     }
 }
