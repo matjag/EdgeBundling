@@ -4,26 +4,46 @@ public class BundlingParameters {
 
     private double compatibilityThreshold;
 
-    private double initialStep;
+    private double step;
 
     private double stepChangeRate;
 
-    private double numberOfIterations;
+    private int numberOfIterations;
 
     private double iterationChangeRate;
 
-    private double numberOfCycles;
+    private int numberOfCycles;
 
     private double globalSpringConstant;
 
-    public BundlingParameters(double compatibilityThreshold, double initialStep, double stepChangeRate, double numberOfIterations, double iterationChangeRate, double numberOfCycles, double globalSpringConstant) {
+    private double shortEdgeThreshold;
+
+    public double getShortEdgeThreshold() {
+        return shortEdgeThreshold;
+    }
+
+    public void setShortEdgeThreshold(int shortEdgeThreshold) {
+        this.shortEdgeThreshold = shortEdgeThreshold;
+    }
+
+    public BundlingParameters(double compatibilityThreshold, double step, double stepChangeRate, int numberOfIterations,
+                              double iterationChangeRate, int numberOfCycles, double globalSpringConstant, double shortEdgeThreshold) {
         this.compatibilityThreshold = compatibilityThreshold;
-        this.initialStep = initialStep;
+        this.step = step;
         this.stepChangeRate = stepChangeRate;
         this.numberOfIterations = numberOfIterations;
         this.iterationChangeRate = iterationChangeRate;
         this.numberOfCycles = numberOfCycles;
         this.globalSpringConstant = globalSpringConstant;
+        this.shortEdgeThreshold = shortEdgeThreshold;
+    }
+
+    public void updateStep() {
+        step *= stepChangeRate;
+    }
+
+    public void updateNumberOfIterations() {
+        numberOfIterations *= iterationChangeRate;
     }
 
     public double getCompatibilityThreshold() {
@@ -34,12 +54,12 @@ public class BundlingParameters {
         this.compatibilityThreshold = compatibilityThreshold;
     }
 
-    public double getInitialStep() {
-        return initialStep;
+    public double getStep() {
+        return step;
     }
 
-    public void setInitialStep(double initialStep) {
-        this.initialStep = initialStep;
+    public void setStep(double step) {
+        this.step = step;
     }
 
     public double getStepChangeRate() {
@@ -54,7 +74,7 @@ public class BundlingParameters {
         return numberOfIterations;
     }
 
-    public void setNumberOfIterations(double numberOfIterations) {
+    public void setNumberOfIterations(int numberOfIterations) {
         this.numberOfIterations = numberOfIterations;
     }
 
@@ -70,7 +90,7 @@ public class BundlingParameters {
         return numberOfCycles;
     }
 
-    public void setNumberOfCycles(double numberOfCycles) {
+    public void setNumberOfCycles(int numberOfCycles) {
         this.numberOfCycles = numberOfCycles;
     }
 

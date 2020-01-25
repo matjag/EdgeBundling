@@ -2,6 +2,7 @@ package pl.polsl.edge_bundling.controller;
 
 
 import javafx.application.Application;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import pl.polsl.edge_bundling.model.DataLoader;
@@ -18,8 +19,17 @@ import java.util.Set;
 public class Main extends Application {
     private final EdgeBundlingGUI edgeBundlingGUI = new EdgeBundlingGUI();
     private final Controller controller = new Controller();
-    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm(0.2, 5, 30, 0.1);
-
+    private final EdgeBundlingAlgorithm algorithm = new EdgeBundlingAlgorithm();
+    private final BundlingParameters parameters = new BundlingParameters(
+            0.2,
+            0.2,
+            0.5,
+            50,
+            0.66,
+            6,
+            0.1,
+            30
+            );
     public static void main(String[] args) {
         launch(args);
     }
@@ -51,7 +61,8 @@ public class Main extends Application {
 
         System.out.println("Total number of edges:\t" + edges.size());
 
-        Set<Edge> shortEdges = controller.resolveShortEdges(edges, algorithm.getNumberOfSegments());
+        Set<Edge> shortEdges = controller.resolveShortEdges(edges, parameters.getShortEdgeThreshold())
+                ;
 
         System.out.println("Resolving short edges:\t" + shortEdges.size());
         System.out.println("Edges left:\t" + edges.size());
@@ -59,22 +70,22 @@ public class Main extends Application {
         long startTime = System.nanoTime();
 
         for (Edge edge : edges) {
-            dividedEdges.add(new DividedEdge(edge, 2, algorithm.getSpringConstant()));
+            dividedEdges.add(new DividedEdge(edge, 2, parameters.getGlobalSpringConstant()));
         }
 
 
-        int I = 50;
-        int C = 6;
+//        int I = 50;
+//        int C = 6;
 
-        algorithm.fillCompatibilities(dividedEdges, 0.2);
+        algorithm.fillCompatibilities(dividedEdges, parameters.getCompatibilityThreshold());
 
-        for (int cycle = 0; cycle < C; cycle++) {
-            for (int i = 0; i < I; i++) {
-                dividedEdges = algorithm.iterate(dividedEdges);
+        for (int cycle = 0; cycle < parameters.getNumberOfCycles(); cycle++) {
+            for (int i = 0; i < parameters.getNumberOfIterations(); i++) {
+                dividedEdges = algorithm.iterate(dividedEdges, parameters.getStep());
             }
             dividedEdges.forEach(DividedEdge::doubleDivisionPoints);
-            I *= 0.66;
-            algorithm.setInitialStep(algorithm.getInitialStep() * 0.5);
+            parameters.updateNumberOfIterations();
+            parameters.updateStep();
         }
 
 

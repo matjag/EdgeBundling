@@ -5,20 +5,20 @@ import java.util.List;
 
 public class EdgeBundlingAlgorithm {
 
-    private double initialStep;
+//    private double initialStep;
 
-    private int numberOfIterations;
+//    private int numberOfIterations;
+//
+//    private int numberOfSegments;
+//
+//    private double springConstant;
 
-    private int numberOfSegments;
-
-    private double springConstant;
-
-    public EdgeBundlingAlgorithm(double initialStep, int numberOfIterations, int numberOfSegments, double springConstant) {
-        this.initialStep = initialStep;
-        this.numberOfIterations = numberOfIterations;
-        this.numberOfSegments = numberOfSegments;
-        this.springConstant = springConstant;
-    }
+//    public EdgeBundlingAlgorithm(double initialStep, int numberOfIterations, int numberOfSegments, double springConstant) {
+//        this.initialStep = initialStep;
+//        this.numberOfIterations = numberOfIterations;
+//        this.numberOfSegments = numberOfSegments;
+//        this.springConstant = springConstant;
+//    }
 
     public Force calculateSpringForce(DividedEdge dividedEdge, int vertexIndex) {
         List<Vertex> vertices = dividedEdge.getDivisionPoints();
@@ -63,7 +63,7 @@ public class EdgeBundlingAlgorithm {
         return force;
     }
 
-    public List<DividedEdge> iterate(List<DividedEdge> dividedEdges) {
+    public List<DividedEdge> iterate(List<DividedEdge> dividedEdges, double step) {
         List<DividedEdge> nextIteration = new ArrayList<>();
         int numberOfSegments = dividedEdges.get(0).getDivisionPoints().size() - 1;
         for (DividedEdge edge : dividedEdges) {
@@ -75,7 +75,7 @@ public class EdgeBundlingAlgorithm {
 //            tmp.add(dividedEdges.get(edgeIndex).getStartingVertex());
 
             for (int vertexIndex = 1; vertexIndex < numberOfSegments; vertexIndex++) {
-                applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex);
+                applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex, step);
 //                tmp.add(applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex));
             }
 //            tmp.add(dividedEdges.get(edgeIndex).getEndingVertex());
@@ -86,14 +86,14 @@ public class EdgeBundlingAlgorithm {
     }
 
 
-    public void applyForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
+    private void applyForces(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex, double step) {
         Force force = calculateForces(dividedEdges, dividedEdge, vertexIndex);
-        force.scale(initialStep);
+        force.scale(step);
         dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
 //        return dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
     }
 
-    public double calcCompatibility(Edge edge1, Edge edge2) {
+    private double calcCompatibility(Edge edge1, Edge edge2) {
         return calcAngleCompatibility(edge1, edge2) *
                 calcPositionCompatibility(edge1, edge2) *
                 calcScaleCompatibility(edge1, edge2) *
@@ -138,37 +138,5 @@ public class EdgeBundlingAlgorithm {
 
     private double scalarProduct(Edge edge1, Edge edge2) {
         return edge1.getXLength() * edge2.getXLength() + edge1.getYLength() * edge2.getYLength();
-    }
-
-    public double getInitialStep() {
-        return initialStep;
-    }
-
-    public void setInitialStep(double initialStep) {
-        this.initialStep = initialStep;
-    }
-
-    public int getNumberOfIterations() {
-        return numberOfIterations;
-    }
-
-    public void setNumberOfIterations(int numberOfIterations) {
-        this.numberOfIterations = numberOfIterations;
-    }
-
-    public int getNumberOfSegments() {
-        return numberOfSegments;
-    }
-
-    public void setNumberOfSegments(int numberOfSegments) {
-        this.numberOfSegments = numberOfSegments;
-    }
-
-    public double getSpringConstant() {
-        return springConstant;
-    }
-
-    public void setSpringConstant(double springConstant) {
-        this.springConstant = springConstant;
     }
 }
