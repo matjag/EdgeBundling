@@ -19,7 +19,7 @@ public class EdgeBundlingAlgorithm {
 
     private Force calculateElectrostaticForce(List<DividedEdge> dividedEdges, DividedEdge dividedEdge, int vertexIndex) {
         if (vertexIndex == 0 || vertexIndex == dividedEdge.getDivisionPoints().size()) {
-            throw new IllegalArgumentException();//todo
+            throw new IllegalArgumentException();
         }
         Force force = new Force(0, 0);
         Vertex currentVertex = dividedEdge.getDivisionPoints().get(vertexIndex);

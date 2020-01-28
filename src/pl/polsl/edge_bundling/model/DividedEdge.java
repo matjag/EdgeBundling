@@ -40,7 +40,7 @@ public class DividedEdge extends Edge {
         this.localSpringConstant = localSpringConstant;
     }
 
-    public DividedEdge(Edge edge, int numberOfSegments, double globalSpringConstant) { //todo edge as argument?
+    public DividedEdge(Edge edge, int numberOfSegments, double globalSpringConstant) {
         super(edge.getStartingVertex(), edge.getEndingVertex());
         Vertex startingVertex = edge.getStartingVertex();
         Vertex endingVertex = edge.getEndingVertex();
@@ -48,7 +48,7 @@ public class DividedEdge extends Edge {
 
         double xLengthOfEdge = startingVertex.xDistanceTo(endingVertex);
         double yLengthOfEdge = startingVertex.yDistanceTo(endingVertex);
-        double xSegmentLength = xLengthOfEdge / numberOfSegments; //todo Math.round?
+        double xSegmentLength = xLengthOfEdge / numberOfSegments;
         double ySegmentLength = yLengthOfEdge / numberOfSegments;
 
         for (int i = 0; i < numberOfSegments - 1; i++) {

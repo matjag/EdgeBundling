@@ -1,8 +1,10 @@
 package pl.polsl.edge_bundling.controller;
 
-class BundlingParameters {
+public class BundlingParameters {
 
     private double compatibilityThreshold;
+
+    private double shortEdgeThreshold;
 
     private double step;
 
@@ -16,22 +18,31 @@ class BundlingParameters {
 
     private double globalSpringConstant;
 
-    private double shortEdgeThreshold;
-
     double getShortEdgeThreshold() {
         return shortEdgeThreshold;
     }
 
-    BundlingParameters(double compatibilityThreshold, double step, double stepChangeRate, int numberOfIterations,
-                       double iterationChangeRate, int numberOfCycles, double globalSpringConstant, double shortEdgeThreshold) {
+    BundlingParameters(double compatibilityThreshold, double shortEdgeThreshold, double step, double stepChangeRate, int numberOfIterations,
+                       double iterationChangeRate, int numberOfCycles, double globalSpringConstant) {
         this.compatibilityThreshold = compatibilityThreshold;
+        this.shortEdgeThreshold = shortEdgeThreshold;
         this.step = step;
         this.stepChangeRate = stepChangeRate;
         this.numberOfIterations = numberOfIterations;
         this.iterationChangeRate = iterationChangeRate;
         this.numberOfCycles = numberOfCycles;
         this.globalSpringConstant = globalSpringConstant;
-        this.shortEdgeThreshold = shortEdgeThreshold;
+    }
+
+    public BundlingParameters(BundlingParameters template) {
+        this.compatibilityThreshold = template.compatibilityThreshold;
+        this.shortEdgeThreshold = template.shortEdgeThreshold;
+        this.step = template.step;
+        this.stepChangeRate = template.stepChangeRate;
+        this.numberOfIterations = template.numberOfIterations;
+        this.iterationChangeRate = template.iterationChangeRate;
+        this.numberOfCycles = template.numberOfCycles;
+        this.globalSpringConstant = template.globalSpringConstant;
     }
 
     void updateStep() {
@@ -62,4 +73,16 @@ class BundlingParameters {
         return globalSpringConstant;
     }
 
+    @Override
+    public String toString() {
+        return
+                "tc" + compatibilityThreshold +
+                        "ts" + shortEdgeThreshold +
+                        "s" + step +
+                        "sr" + stepChangeRate +
+                        "i" + numberOfIterations +
+                        "ir" + iterationChangeRate +
+                        "c" + numberOfCycles +
+                        "k" + globalSpringConstant;
+    }
 }
