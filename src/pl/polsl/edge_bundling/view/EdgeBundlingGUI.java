@@ -66,71 +66,41 @@ public class EdgeBundlingGUI {
         stage.show();
     }
 
-    public void setEdges(Set<Line> edges) {
-        this.edges = edges;
-    }
 
-    public void saveStartingParameters(BundlingParameters parameters) {
-        this.parameters = new BundlingParameters(parameters);
-    }
+    public Scene displayBundling() {
+        String imageName = datasetChoice.getValue().toString();
+        File file = new File("data/" + imageName + "/animal.jpg");
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            Image image = new Image(fileInputStream);
+            Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            gc.setStroke(Color.RED);
+            gc.setFill(Color.YELLOW);
+            ScrollPane scrollPane = new ScrollPane(canvas);
+            scrollPane.setPrefSize(500, 500);
+            scrollPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+            Scene scene = new Scene(scrollPane);
+            gc.drawImage(image, 0, 0);
+            edges.forEach(edge -> {
+                gc.strokeLine(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY());
+            });
 
-    private TextFormatter<Double> getDoubleFormatter(double initialValue) {
-        Pattern validEditingState = Pattern.compile("(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
-        UnaryOperator<TextFormatter.Change> filter = c -> {
-            String text = c.getControlNewText();
-            if (validEditingState.matcher(text).matches()) {
-                return c;
-            } else {
-                return null;
+
+            File saveFile = new File("result/" + imageName + parameters.toString() + ".png");
+            WritableImage wi = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(canvas.snapshot(null, wi), null), "png", saveFile);
+                return scene;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        };
-        StringConverter<Double> converter = new StringConverter<>() {
-            @Override
-            public Double fromString(String s) {
-                if (s.isEmpty() || ".".equals(s)) {
-                    return 0.0;
-                } else {
-                    return Double.valueOf(s);
-                }
-            }
-
-            @Override
-            public String toString(Double d) {
-                return d.toString();
-            }
-        };
-
-        return new TextFormatter<>(converter, initialValue, filter);
-    }
-
-
-    private TextFormatter<Integer> getIntegerFormatter(int initialValue) {
-        Pattern validEditingState = Pattern.compile("\\d+");
-        UnaryOperator<TextFormatter.Change> filter = c -> {
-            String text = c.getControlNewText();
-            if (validEditingState.matcher(text).matches()) {
-                return c;
-            } else {
-                return null;
-            }
-        };
-        StringConverter<Integer> converter = new StringConverter<>() {
-            @Override
-            public Integer fromString(String s) {
-                if (s.isEmpty()) {
-                    return 0;
-                } else {
-                    return Integer.valueOf(s);
-                }
-            }
-
-            @Override
-            public String toString(Integer d) {
-                return d.toString();
-            }
-        };
-
-        return new TextFormatter<>(converter, initialValue, filter);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 
@@ -215,6 +185,65 @@ public class EdgeBundlingGUI {
         return new Scene(grid, 400, 450);
     }
 
+    private TextFormatter<Double> getDoubleFormatter(double initialValue) {
+        Pattern validEditingState = Pattern.compile("(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            String text = c.getControlNewText();
+            if (validEditingState.matcher(text).matches()) {
+                return c;
+            } else {
+                return null;
+            }
+        };
+        StringConverter<Double> converter = new StringConverter<>() {
+            @Override
+            public Double fromString(String s) {
+                if (s.isEmpty() || ".".equals(s)) {
+                    return 0.0;
+                } else {
+                    return Double.valueOf(s);
+                }
+            }
+
+            @Override
+            public String toString(Double d) {
+                return d.toString();
+            }
+        };
+
+        return new TextFormatter<>(converter, initialValue, filter);
+    }
+
+
+    private TextFormatter<Integer> getIntegerFormatter(int initialValue) {
+        Pattern validEditingState = Pattern.compile("\\d+");
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            String text = c.getControlNewText();
+            if (validEditingState.matcher(text).matches()) {
+                return c;
+            } else {
+                return null;
+            }
+        };
+        StringConverter<Integer> converter = new StringConverter<>() {
+            @Override
+            public Integer fromString(String s) {
+                if (s.isEmpty()) {
+                    return 0;
+                } else {
+                    return Integer.valueOf(s);
+                }
+            }
+
+            @Override
+            public String toString(Integer d) {
+                return d.toString();
+            }
+        };
+
+        return new TextFormatter<>(converter, initialValue, filter);
+    }
+
     public Button getButton() {
         return button;
     }
@@ -255,42 +284,13 @@ public class EdgeBundlingGUI {
         return datasetChoice;
     }
 
-    public Scene displayBundling() {
-        String imageName = datasetChoice.getValue().toString();
-        File file = new File("data/" + imageName + "/animal.jpg");
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            Image image = new Image(fileInputStream);
-            Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
-            GraphicsContext gc = canvas.getGraphicsContext2D();
-            gc.setStroke(Color.RED);
-            gc.setFill(Color.YELLOW);
-            ScrollPane scrollPane = new ScrollPane(canvas);
-            scrollPane.setPrefSize(500, 500);
-            scrollPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            scrollPane.setFitToWidth(true);
-            scrollPane.setFitToHeight(true);
-            Scene scene = new Scene(scrollPane);
-            gc.drawImage(image, 0, 0);
-            edges.forEach(edge -> {
-                gc.strokeLine(edge.getStartX(), edge.getStartY(), edge.getEndX(), edge.getEndY());
-            });
-
-
-            File saveFile = new File("result/" + imageName + parameters.toString() + ".png");
-            WritableImage wi = new WritableImage((int) image.getWidth(), (int) image.getHeight());
-            try {
-                ImageIO.write(SwingFXUtils.fromFXImage(canvas.snapshot(null, wi), null), "png", saveFile);
-                return scene;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
+    public void setEdges(Set<Line> edges) {
+        this.edges = edges;
     }
 
+    public void saveStartingParameters(BundlingParameters parameters) {
+        this.parameters = new BundlingParameters(parameters);
+    }
 
 }
 
