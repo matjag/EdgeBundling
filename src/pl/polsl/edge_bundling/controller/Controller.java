@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Controller {
+class Controller {
 
     private EdgeBundlingAlgorithm algorithm;
 
@@ -23,7 +23,7 @@ public class Controller {
 
     private String datasetName;
 
-    public void run(Stage stage) {
+    void run(Stage stage) {
 
         edgeBundlingGUI.start(stage);
 
@@ -92,15 +92,15 @@ public class Controller {
         });
     }
 
-    public Line verticesToLine(Vertex vertex1, Vertex vertex2) {
+    private Line verticesToLine(Vertex vertex1, Vertex vertex2) {
         return new Line(vertex1.getX(), vertex1.getY(), vertex2.getX(), vertex2.getY());
     }
 
-    public Line edgeToLine(Edge edge) {
+    private Line edgeToLine(Edge edge) {
         return verticesToLine(edge.getStartingVertex(), edge.getEndingVertex());
     }
 
-    public Set<Line> dividedEdgeToLine(DividedEdge dividedEdge) {
+    private Set<Line> dividedEdgeToLine(DividedEdge dividedEdge) {
         Set<Line> lines = new HashSet<>();
         List<Vertex> divisionPoints = dividedEdge.getDivisionPoints();
         for (int i = 0; i < divisionPoints.size() - 1; i++) {
@@ -110,7 +110,7 @@ public class Controller {
         return lines;
     }
 
-    public Set<Edge> resolveShortEdges(Set<Edge> edges, double threshold) {
+    private Set<Edge> resolveShortEdges(Set<Edge> edges, double threshold) {
         Set<Edge> shortEdges = new HashSet<>();
         for (Edge edge : edges) {
             if (edge.getLength() < threshold) {
@@ -121,7 +121,7 @@ public class Controller {
         return shortEdges;
     }
 
-    public Controller(EdgeBundlingAlgorithm algorithm, EdgeBundlingGUI edgeBundlingGUI) {
+    Controller(EdgeBundlingAlgorithm algorithm, EdgeBundlingGUI edgeBundlingGUI) {
         this.algorithm = algorithm;
         this.edgeBundlingGUI = edgeBundlingGUI;
     }

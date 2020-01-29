@@ -6,15 +6,15 @@ public class Edge {
 
     private Vertex endingVertex;
 
-    public Edge() {
+    Edge() {
     }
 
-    public Edge(Vertex startingVertex, Vertex endingVertex) {
+    Edge(Vertex startingVertex, Vertex endingVertex) {
         this.startingVertex = startingVertex;
         this.endingVertex = endingVertex;
     }
 
-    public Vertex getMidpoint() {
+    Vertex getMidpoint() {
         return new Vertex((startingVertex.getX() + endingVertex.getX()) / 2.0,
                 (startingVertex.getY() + endingVertex.getY()) / 2.0);
     }
@@ -23,7 +23,7 @@ public class Edge {
         return startingVertex;
     }
 
-    public void setStartingVertex(Vertex startingVertex) {
+    void setStartingVertex(Vertex startingVertex) {
         this.startingVertex = startingVertex;
     }
 
@@ -31,7 +31,7 @@ public class Edge {
         return endingVertex;
     }
 
-    public void setEndingVertex(Vertex endingVertex) {
+    void setEndingVertex(Vertex endingVertex) {
         this.endingVertex = endingVertex;
     }
 
@@ -39,11 +39,11 @@ public class Edge {
         return startingVertex.distanceTo(endingVertex);
     }
 
-    public double getYLength() {
+    double getYLength() {
         return startingVertex.yDistanceTo(endingVertex);
     }
 
-    public double getXLength() {
+    double getXLength() {
         return startingVertex.xDistanceTo(endingVertex);
     }
 }
