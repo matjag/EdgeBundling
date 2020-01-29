@@ -7,7 +7,7 @@ import java.util.*;
 
 public class DataLoader {
 
-    public Set<Edge> loadFromCsv(String filename) {
+    public Set<Edge> loadFromCsv(String filename, int xMax, int yMax) {
         List<Vertex> vertices = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String entry;
@@ -15,11 +15,11 @@ public class DataLoader {
                 vertices.add(new Vertex(entry.split(",")));
             }
         } catch (IOException e) {
-            //Some error logging todo
+            System.out.println(e.getMessage());
         }
 
-        vertices.removeIf(vertex -> vertex.getY() <= 0 || vertex.getX() <= 0 || vertex.getX() > 2288 || vertex.getY() > 1712); //todo hardcoded property values
-        Collections.sort(vertices);//todo needed?
+        vertices.removeIf(vertex -> vertex.getY() <= 0 || vertex.getX() <= 0 || vertex.getX() > xMax || vertex.getY() > yMax);
+        Collections.sort(vertices);
 
         return verticesToEdges(vertices);
     }

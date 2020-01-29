@@ -11,61 +11,37 @@ public class Vertex implements Comparable<Vertex> {
 
     private double y;
 
-    public Date getTimestamp() {
+    private Date getTimestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
     }
 
     public double getX() {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
     public double getY() {
         return y;
     }
 
-    public void applyForce(Force force) {
-        x+= force.getX();
-        y+= force.getY();
-//        return new Vertex(x + force.getX(), y + force.getY());
+    void applyForce(Force force) {
+        x += force.getX();
+        y += force.getY();
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public Vertex(Date timestamp, int x, int y) {
-        this.timestamp = timestamp;
-        this.x = x;
-        this.y = y;
-    }
-
-    public Vertex() {
-    }
-
-    public Vertex(Vertex template) {
+    Vertex(Vertex template) {
         this.timestamp = template.getTimestamp();
         this.x = template.getX();
         this.y = template.getY();
     }
 
-    public Vertex(double x, double y) {
+    Vertex(double x, double y) {
         this.timestamp = null;
         this.x = x;
         this.y = y;
     }
 
-    public Vertex(String[] entry) {
+    Vertex(String[] entry) {
         this.timestamp = new Date(Long.parseLong(entry[0]));
-//        this.x=Double.parseDouble(entry[1]) * 5+ 900;
-//        this.y=Double.parseDouble(entry[2]) * 5+ 900;
         this.x = Integer.parseInt(entry[1]);
         this.y = Integer.parseInt(entry[2]);
     }
@@ -75,16 +51,16 @@ public class Vertex implements Comparable<Vertex> {
         return getTimestamp().compareTo(vertex.getTimestamp());
     }
 
-    public double distanceTo(Vertex vertex) {
+    double distanceTo(Vertex vertex) {
         return Math.sqrt((vertex.getY() - this.getY()) * (vertex.getY() - this.getY()) +
                 (vertex.getX() - this.getX()) * (vertex.getX() - this.getX()));
     }
 
-    public double xDistanceTo(Vertex vertex) {
+    double xDistanceTo(Vertex vertex) {
         return vertex.getX() - this.getX();
     }
 
-    public double yDistanceTo(Vertex vertex) {
+    double yDistanceTo(Vertex vertex) {
         return vertex.getY() - this.getY();
     }
 }

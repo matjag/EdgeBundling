@@ -35,7 +35,6 @@ public class Edge {
         this.endingVertex = endingVertex;
     }
 
-    //todo int?
     public double getLength() {
         return startingVertex.distanceTo(endingVertex);
     }

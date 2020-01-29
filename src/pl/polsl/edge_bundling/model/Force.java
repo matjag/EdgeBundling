@@ -1,41 +1,39 @@
 package pl.polsl.edge_bundling.model;
 
-public class Force {
+class Force {
 
     private double x;
 
     private double y;
 
-    public Force(double x, double y) {
+    Force(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public Force combine(Force force) {
+    void combine(Force force) {
         this.x += force.getX();
         this.y += force.getY();
-        return this;
     }
 
-    public Force scale(double scale) {
+    void scale(double scale) {
         this.x *= scale;
         this.y *= scale;
-        return this;
     }
 
-    public double getX() {
+    double getX() {
         return x;
     }
 
-    public void setX(double x) {
+    void setX(double x) {
         this.x = x;
     }
 
-    public double getY() {
+    double getY() {
         return y;
     }
 
-    public void setY(double y) {
+    void setY(double y) {
         this.y = y;
     }
 }
