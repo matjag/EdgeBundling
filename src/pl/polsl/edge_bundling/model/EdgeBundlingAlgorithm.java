@@ -53,15 +53,9 @@ public class EdgeBundlingAlgorithm {
         }
 
         for (int edgeIndex = 0; edgeIndex < dividedEdges.size(); edgeIndex++) {
-//            List<Vertex> tmp = new ArrayList<>();
-//            tmp.add(dividedEdges.get(edgeIndex).getStartingVertex());
-
             for (int vertexIndex = 1; vertexIndex < numberOfSegments; vertexIndex++) {
                 applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex, step);
-//                tmp.add(applyForces(dividedEdges, dividedEdges.get(edgeIndex), vertexIndex));
             }
-//            tmp.add(dividedEdges.get(edgeIndex).getEndingVertex());
-//            nextIteration.get(edgeIndex).setDivisionPoints(tmp);
         }
 
         return dividedEdges;
@@ -72,14 +66,12 @@ public class EdgeBundlingAlgorithm {
         Force force = calculateForces(dividedEdges, dividedEdge, vertexIndex);
         force.scale(step);
         dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
-//        return dividedEdge.getDivisionPoints().get(vertexIndex).applyForce(force);
     }
 
     private double calcCompatibility(Edge edge1, Edge edge2) {
         return calcAngleCompatibility(edge1, edge2) *
                 calcPositionCompatibility(edge1, edge2) *
-                calcScaleCompatibility(edge1, edge2) *
-                calcVisibilityCompatibility(edge1, edge2);
+                calcScaleCompatibility(edge1, edge2);
     }
 
     private double calcAngleCompatibility(Edge edge1, Edge edge2) {
@@ -112,11 +104,6 @@ public class EdgeBundlingAlgorithm {
             }
         }
     }
-
-    private double calcVisibilityCompatibility(Edge edge1, Edge edge2) {
-        return 1.0;//todo
-    }
-
 
     private double scalarProduct(Edge edge1, Edge edge2) {
         return edge1.getXLength() * edge2.getXLength() + edge1.getYLength() * edge2.getYLength();

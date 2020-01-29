@@ -61,7 +61,6 @@ public class Controller {
                 System.out.println("Resolving short edges:\t" + shortEdges.size());
                 System.out.println("Edges left:\t" + edges.size());
                 System.out.println("Bundling...");
-                long startTime = System.nanoTime();
 
                 for (Edge edge : edges) {
                     dividedEdges.add(new DividedEdge(edge, 2, parameters.getGlobalSpringConstant()));
@@ -85,11 +84,6 @@ public class Controller {
 
 
                 edgeBundlingGUI.setEdges(lines);
-//                edgeBundlingGUI.start(stage, datasetName);
-
-                long endTime = System.nanoTime();
-                System.out.println("Time elapsed:\t" + (endTime - startTime) / 1000000000.0);
-
 
                 Stage stage = new Stage();
                 stage.setScene(edgeBundlingGUI.displayBundling());

@@ -72,7 +72,6 @@ public class DividedEdge extends Edge {
             newDivisionPoints.add(current);
         }
         this.divisionPoints = newDivisionPoints;
-//        localSpringConstant *= 0.5;
     }
 
     public List<Vertex> getDivisionPoints() {
