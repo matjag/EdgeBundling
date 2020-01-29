@@ -18,6 +18,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import pl.polsl.edge_bundling.controller.BundlingParameters;
@@ -62,7 +63,7 @@ public class EdgeBundlingGUI {
         stage.setTitle("Edge Bundling");
         stage.setMinWidth(100);
         stage.setMinHeight(100);
-        stage.setScene(prepareForm());
+        stage.setScene(prepareForm(stage));
         stage.show();
     }
 
@@ -104,7 +105,7 @@ public class EdgeBundlingGUI {
     }
 
 
-    private Scene prepareForm() {
+    private Scene prepareForm(Stage stage) {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -182,6 +183,17 @@ public class EdgeBundlingGUI {
         hbBtn.getChildren().add(button);
         grid.add(hbBtn, 1, 10);
 
+        Button chooseDirectoryButton = new Button ("Set directory");
+        HBox hbBtn2 = new HBox(10);
+        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn.getChildren().add(chooseDirectoryButton);
+        grid.add(hbBtn2, 1, 11);
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        chooseDirectoryButton.setOnAction(e -> {
+            File selectedDirectory = directoryChooser.showDialog(stage);
+//            stage.show();
+        });
         return new Scene(grid, 400, 450);
     }
 
